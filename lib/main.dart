@@ -1,6 +1,8 @@
-import 'package:currency_calculator/currency_model.dart';
+import 'package:currency_calculator/features/currency_calculator/data/models/currency_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+
+import 'features/currency_calculator/presentation/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,17 +33,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
 
-  @override
-  _MainScreenState createState() => _MainScreenState();
-}
 
-class _MainScreenState extends State<MainScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
+
+
+
 
