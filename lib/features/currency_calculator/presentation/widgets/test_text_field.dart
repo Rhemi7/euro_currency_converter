@@ -11,9 +11,10 @@ class TestTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 13.0),
+      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 13.0),
       child: TextField(
         controller: controller,
+        keyboardType: TextInputType.number,
         decoration: InputDecoration(
             isCollapsed: true,
             isDense: true,
@@ -21,9 +22,16 @@ class TestTextField extends StatelessWidget {
             fillColor: const Color(0xffFAFAFA),
             contentPadding:
             const EdgeInsets.symmetric(vertical: 15.0, horizontal: 12.0),
+
             suffixStyle:
             const TextStyle(color: Color(0xffC8C8C8), fontSize: 15.0),
-            suffixText: suffixText,
+            suffixIcon: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Text(
+                  suffixText,
+                  style:
+                  const TextStyle(color: Color(0xffC8C8C8), fontSize: 15.0),
+                )),
             enabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               borderSide: BorderSide(color: Colors.white),

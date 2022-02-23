@@ -1,3 +1,4 @@
+import 'package:currency_calculator/features/currency_calculator/presentation/notifier/converter_notifier/converter_state.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,14 +27,52 @@ class _MainScreenState extends State<MainScreen> {
   List<CurrencyModel> currencyList = [
     CurrencyModel(name: 'EUR', image: ''),
     CurrencyModel(name: 'USD', image: ''),
+    CurrencyModel(name: 'AUD', image: ''),
+    CurrencyModel(name: 'CAD', image: ''),
     CurrencyModel(name: 'PLN', image: ''),
+    CurrencyModel(name: 'MXN', image: ''),
   ];
 
-  CurrencyModel selectedFirstCurrency = CurrencyModel(name: 'EUR', image: '');
-  CurrencyModel selectedSecondCurrency = CurrencyModel(name: 'EUR', image: '');
+
   String _selectedFirstCurrency = 'EUR';
   String _selectedSecondCurrency = 'PLN';
 
+  double? rate = 0;
+
+  calculateConvertedValue() {
+    context
+        .read(converterNotifierProvider.notifier)
+        .getRate(_selectedSecondCurrency);
+
+    print('current $rate');
+
+
+    secondFieldController.text = (int.parse(firstFieldController.text) *
+        rate!)
+        .toString();
+    // cost = (int.parse(_sharesController.text) *
+    //     double.parse(widget.stockInfo.price))
+    //     .toString();
+  }
+
+  @override
+  void initState() {
+    firstFieldController.addListener(calculateConvertedValue);
+
+    secondFieldController.addListener(calculateConvertedValue);
+    // _amountController.addListener(calculateQuantity);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // _sharesController.removeListener(calculateCost);
+    // _amountController.removeListener(calculateQuantity);
+    // _amountController.dispose();
+    // _sharesController.dispose();
+    // _mainController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +124,54 @@ class _MainScreenState extends State<MainScreen> {
               suffixText: _selectedFirstCurrency,
               controller: firstFieldController,
             ),
-            TestTextField(
-              suffixText: _selectedSecondCurrency,
-              controller: secondFieldController,
+            Consumer(
+              builder: (context, watch, child) {
+                final converterState = watch(converterNotifierProvider);
+//if (drinksState is DrinksLoading) {
+//                 return const CircularProgressIndicator();
+//               } else if (drinksState is DrinksLoaded) {
+//                 return ListView.separated(
+//                     itemBuilder: (index, context) {
+//                       return Checkbox(
+//                           value: true,
+//                           onChanged: (bool? val) {
+//                             val = true;
+//                           });
+//                     },
+//                     separatorBuilder: (index, context) {
+//                       return const SizedBox(
+//                         height: 10,
+//                       );
+//                     },
+//                     itemCount: drinksState.drinks!.length);
+//               } else if (drinksState is DrinksError) {
+//                 Center(
+//                   child: Text(
+//                     drinksState.message.toString(),
+//                     style: const TextStyle(color: Colors.black),
+//                   ),
+//                 );
+//               }
+//               return Container();
+                if (converterState is ConverterLoading) {
+                  return TestTextField(
+                    suffixText: _selectedSecondCurrency,
+                    controller: secondFieldController,
+                  );
+                } else if (converterState is ConverterLoaded) {
+                 rate = converterState.rate;
+                  return TestTextField(
+                    suffixText: _selectedSecondCurrency,
+                    controller: secondFieldController,
+                  );
+                } else if (converterState is ConverterError) {
+                  return Text(converterState.message.toString());
+                }
+                return TestTextField(
+                  suffixText: _selectedSecondCurrency,
+                  controller: secondFieldController,
+                );
+              }
             ),
             const SizedBox(
               height: 20,

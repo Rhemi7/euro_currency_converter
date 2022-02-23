@@ -17,7 +17,7 @@ class ConverterRemoteDataSourceImpl implements ConverterRemoteDataSource {
   @override
   Future<ConverterResponse> getCurrencyRate(String currency) async {
     final response = await client.get(
-      Uri.parse('http://data.fixer.io/api/latest?access_key=b641a6e48ddbb9bff685fe3b058136be&symbols=USD&format=1'),
+      Uri.parse('http://data.fixer.io/api/latest?access_key=b641a6e48ddbb9bff685fe3b058136be&symbols=$currency&format=1'),
     );
 
     if (response.statusCode == 200) {
