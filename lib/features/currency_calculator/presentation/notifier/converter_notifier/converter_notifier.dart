@@ -16,6 +16,7 @@ class ConverterNotifier extends StateNotifier<ConverterState> {
 
 
         state = ConverterLoaded(rate: rate.rates?.values.first);
+        print('rate ${rate.rates?.values.first}');
       });
     } catch (e) {
       state = ConverterError(message: e.toString());

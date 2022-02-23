@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'service_locator.dart' as di;
 import 'features/currency_calculator/presentation/screens/main_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //initialize dependency injection
+  await di.setUpLocator();
+  runApp(const ProviderScope(child: MyApp(),));
 }
 
 class MyApp extends StatelessWidget {

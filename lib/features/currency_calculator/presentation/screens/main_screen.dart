@@ -1,7 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/currency_model.dart';
+import '../provider/providers.dart';
 import '../widgets/currency_drop_down_widget.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/test_text_field.dart';
@@ -24,12 +25,15 @@ class _MainScreenState extends State<MainScreen> {
 
   List<CurrencyModel> currencyList = [
     CurrencyModel(name: 'EUR', image: ''),
-    CurrencyModel(name: 'EUR', image: ''),
-    CurrencyModel(name: 'EUR', image: ''),
+    CurrencyModel(name: 'USD', image: ''),
+    CurrencyModel(name: 'PLN', image: ''),
   ];
 
   CurrencyModel selectedFirstCurrency = CurrencyModel(name: 'EUR', image: '');
   CurrencyModel selectedSecondCurrency = CurrencyModel(name: 'EUR', image: '');
+  String _selectedFirstCurrency = 'EUR';
+  String _selectedSecondCurrency = 'PLN';
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             Padding(
               padding:
-              const EdgeInsets.only(top: 25.0, left: 15.0, right: 15.0),
+                  const EdgeInsets.only(top: 25.0, left: 15.0, right: 15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -78,11 +82,11 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             TestTextField(
-              suffixText: 'EUR',
+              suffixText: _selectedFirstCurrency,
               controller: firstFieldController,
             ),
             TestTextField(
-              suffixText: 'PLN',
+              suffixText: _selectedSecondCurrency,
               controller: secondFieldController,
             ),
             const SizedBox(
@@ -91,19 +95,20 @@ class _MainScreenState extends State<MainScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28.0),
               child: Row(
-                children: const [
-                  CurrencyDropdownWidget(),
-                  SizedBox(
+                children: [
+                  customDropDownWidget(true),
+                  // const ,
+                  const SizedBox(
                     width: 10,
                   ),
-                  Icon(
-                    Icons.change_circle_rounded,
+                  const Icon(
+                    Icons.sync_alt,
                     color: Color(0xff8C8C8C),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  CurrencyDropdownWidget(),
+                  customDropDownWidget(false),
                 ],
               ),
             ),
@@ -114,7 +119,11 @@ class _MainScreenState extends State<MainScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 28.0),
               child: PrimaryButton(
                 text: 'Convert',
-                onPressed: () {},
+                onPressed: () {
+                  context
+                      .read(converterNotifierProvider.notifier)
+                      .getRate("USD");
+                },
               ),
             ),
             const SizedBox(
@@ -151,7 +160,6 @@ class _MainScreenState extends State<MainScreen> {
             Container(
               padding: const EdgeInsets.fromLTRB(25.0, 25.0, 30.0, 35.0),
               width: MediaQuery.of(context).size.width,
-
               decoration: const BoxDecoration(
                   color: Color(0xff035FD1),
                   borderRadius: BorderRadius.only(
@@ -165,27 +173,34 @@ class _MainScreenState extends State<MainScreen> {
                     children: [
                       Column(
                         children: const [
-                          Text('Past 30 days', style: TextStyle(color: Colors.white),),
+                          Text(
+                            'Past 30 days',
+                            style: TextStyle(color: Colors.white),
+                          ),
                           SizedBox(
                             height: 5,
                           ),
                           CircleAvatar(
                             radius: 2,
                             backgroundColor: Color(0xff00D899),
-                          )                        ],
+                          )
+                        ],
                       ),
                       Column(
                         children: const [
-                          Text('Past 90 days', style: TextStyle(color: Colors.white),),
+                          Text(
+                            'Past 90 days',
+                            style: TextStyle(color: Colors.white),
+                          ),
                           SizedBox(
                             height: 5,
                           ),
                           CircleAvatar(
                             radius: 2,
                             backgroundColor: Color(0xff00D899),
-                          )                        ],
+                          )
+                        ],
                       ),
-
                     ],
                   ),
                   const SizedBox(
@@ -199,13 +214,7 @@ class _MainScreenState extends State<MainScreen> {
                         LineChartData(
                           lineTouchData: LineTouchData(
 
-                            // touchTooltipData: LineTouchTooltipData(
-                            //   tooltipBgColor: HashColors.colorPink,
-                            // ),
-                            // touchCallback: (LineTouchResponse touchResponse) {
-                            //   // handle it
-                            // },
-                          ),
+                              ),
                           gridData: FlGridData(
                             show: false,
                             drawVerticalLine: false,
@@ -228,18 +237,12 @@ class _MainScreenState extends State<MainScreen> {
                               showTitles: true,
                               reservedSize: 22,
                               getTextStyles: (context, value) =>
-                              const TextStyle(
-                                  color: Color(0xff68737d),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                  const TextStyle(
+                                      color: Color(0xff68737d),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
                               getTitles: (value) {
                                 switch (value.toInt()) {
-                                // case 2:
-                                //   return 'MAR';
-                                // case 5:
-                                //   return 'JUN';
-                                // case 8:
-                                //   return 'SEP';
                                 }
                                 return '';
                               },
@@ -248,19 +251,14 @@ class _MainScreenState extends State<MainScreen> {
                             leftTitles: SideTitles(
                               showTitles: true,
                               getTextStyles: (context, value) =>
-                              const TextStyle(
+                                  const TextStyle(
                                 color: Color(0xff67727d),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),
                               getTitles: (value) {
                                 switch (value.toInt()) {
-                                // case 1:
-                                //   return '10k';
-                                // case 3:
-                                //   return '30k';
-                                // case 5:
-                                //   return '50k';
+
                                 }
                                 return '';
                               },
@@ -271,8 +269,7 @@ class _MainScreenState extends State<MainScreen> {
                           borderData: FlBorderData(
                               show: false,
                               border: Border.all(
-                                  color: const Color(0xff37434d),
-                                  width: 1)),
+                                  color: const Color(0xff37434d), width: 1)),
                           minX: 0,
                           maxX: 30,
                           minY: 0,
@@ -314,8 +311,7 @@ class _MainScreenState extends State<MainScreen> {
                               belowBarData: BarAreaData(
                                 show: true,
                                 colors: gradientColors
-                                    .map(
-                                        (color) => color.withOpacity(0.2))
+                                    .map((color) => color.withOpacity(0.2))
                                     .toList(),
                               ),
                             ),
@@ -342,5 +338,41 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  Expanded customDropDownWidget(bool first) {
+    return Expanded(
+                  child: Container(
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 7.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xffF2F2F2), width: 2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<dynamic>(
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: Color(0xff8C8C8C),
+                        ),
+                          value: first ? _selectedFirstCurrency : _selectedSecondCurrency,
+                          items: currencyList.map((CurrencyModel currency) {
+                            return DropdownMenuItem(
+                                value: currency.name,
+                                child: Opacity(
+                                  opacity: 1,
+                                  child: CustomTextWidget(
+                                    currency: currency.name,
+                                  ),
+                                ));
+                          }).toList(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              first ? _selectedFirstCurrency = newValue : _selectedSecondCurrency = newValue;
+                            });
+                          }),
+                    ),
+                  ),
+                );
   }
 }
