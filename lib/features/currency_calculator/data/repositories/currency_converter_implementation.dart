@@ -14,10 +14,10 @@ class CurrencyConverterRepositoryImpl implements CurrencyConverterRepository {
 
 
   @override
-  Future<Either<Failure, ConverterResponse>> getCurrencyConverter() async {
+  Future<Either<Failure, ConverterResponse>> getCurrencyConverter(String currency) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteDrinks = await remoteDataSource.getCurrencyRate();
+        final remoteDrinks = await remoteDataSource.getCurrencyRate(currency);
 
         return Right(remoteDrinks);
       } on ServerException {

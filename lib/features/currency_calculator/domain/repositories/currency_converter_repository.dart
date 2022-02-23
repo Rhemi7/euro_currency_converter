@@ -7,5 +7,5 @@ import '../../../../core/error/failure.dart';
 ///currency converter repository abstraction
 abstract class CurrencyConverterRepository {
   ///method that gets currency converter or failure
-  Future<Either<Failure, ConverterResponse>> getCurrencyConverter();
+  Future<Either<Failure, ConverterResponse>> getCurrencyConverter(String currency);
 }

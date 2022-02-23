@@ -6,7 +6,7 @@ import '../models/converter_response.dart';
 abstract class ConverterRemoteDataSource {
   ///gets results from endpoint and returns the model
   ///or throws server exception if error
-  Future<ConverterResponse> getCurrencyRate();
+  Future<ConverterResponse> getCurrencyRate(String currency);
 }
 
 class ConverterRemoteDataSourceImpl implements ConverterRemoteDataSource {
@@ -15,7 +15,7 @@ class ConverterRemoteDataSourceImpl implements ConverterRemoteDataSource {
   final http.Client client;
 
   @override
-  Future<ConverterResponse> getCurrencyRate() async {
+  Future<ConverterResponse> getCurrencyRate(String currency) async {
     final response = await client.get(
       Uri.parse('http://data.fixer.io/api/latest?access_key=b641a6e48ddbb9bff685fe3b058136be&symbols=USD&format=1'),
     );
