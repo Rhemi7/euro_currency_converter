@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 
 class CustomTextWidget extends StatelessWidget {
- final String currency;
+  final String currency;
+  final String image;
 
-  const CustomTextWidget({Key? key, required this.currency}) : super(key: key);
+  const CustomTextWidget(
+      {Key? key, required this.currency, required this.image})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 10,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                image: DecorationImage(
+              fit: BoxFit.fill,
+              image: AssetImage(image),
+            )),
+          ),
         ),
-       const SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Text(

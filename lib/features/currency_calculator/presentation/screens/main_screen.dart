@@ -25,12 +25,12 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   List<CurrencyModel> currencyList = [
-    CurrencyModel(name: 'EUR', image: ''),
-    CurrencyModel(name: 'USD', image: ''),
-    CurrencyModel(name: 'AUD', image: ''),
-    CurrencyModel(name: 'CAD', image: ''),
-    CurrencyModel(name: 'PLN', image: ''),
-    CurrencyModel(name: 'MXN', image: ''),
+    CurrencyModel(name: 'EUR', image: 'assets/images/euro.png'),
+    CurrencyModel(name: 'USD', image: 'assets/images/us.png'),
+    CurrencyModel(name: 'AUD', image: 'assets/images/aus.png'),
+    CurrencyModel(name: 'CAD', image: 'assets/images/can.png'),
+    CurrencyModel(name: 'PLN', image: 'assets/images/poland.png'),
+    CurrencyModel(name: 'MXN', image: 'assets/images/mexico.png'),
   ];
 
 
@@ -50,27 +50,20 @@ class _MainScreenState extends State<MainScreen> {
     secondFieldController.text = (int.parse(firstFieldController.text) *
         rate!)
         .toString();
-    // cost = (int.parse(_sharesController.text) *
-    //     double.parse(widget.stockInfo.price))
-    //     .toString();
+
   }
 
   @override
   void initState() {
     firstFieldController.addListener(calculateConvertedValue);
-
     secondFieldController.addListener(calculateConvertedValue);
-    // _amountController.addListener(calculateQuantity);
     super.initState();
   }
 
   @override
   void dispose() {
     // _sharesController.removeListener(calculateCost);
-    // _amountController.removeListener(calculateQuantity);
-    // _amountController.dispose();
-    // _sharesController.dispose();
-    // _mainController.dispose();
+
     super.dispose();
   }
 
@@ -127,32 +120,6 @@ class _MainScreenState extends State<MainScreen> {
             Consumer(
               builder: (context, watch, child) {
                 final converterState = watch(converterNotifierProvider);
-//if (drinksState is DrinksLoading) {
-//                 return const CircularProgressIndicator();
-//               } else if (drinksState is DrinksLoaded) {
-//                 return ListView.separated(
-//                     itemBuilder: (index, context) {
-//                       return Checkbox(
-//                           value: true,
-//                           onChanged: (bool? val) {
-//                             val = true;
-//                           });
-//                     },
-//                     separatorBuilder: (index, context) {
-//                       return const SizedBox(
-//                         height: 10,
-//                       );
-//                     },
-//                     itemCount: drinksState.drinks!.length);
-//               } else if (drinksState is DrinksError) {
-//                 Center(
-//                   child: Text(
-//                     drinksState.message.toString(),
-//                     style: const TextStyle(color: Colors.black),
-//                   ),
-//                 );
-//               }
-//               return Container();
                 if (converterState is ConverterLoading) {
                   return TestTextField(
                     suffixText: _selectedSecondCurrency,
@@ -447,6 +414,7 @@ class _MainScreenState extends State<MainScreen> {
                                   opacity: 1,
                                   child: CustomTextWidget(
                                     currency: currency.name,
+                                    image: currency.image,
                                   ),
                                 ));
                           }).toList(),
