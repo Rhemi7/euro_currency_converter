@@ -1,5 +1,3 @@
-import 'package:currency_calculator/features/currency_calculator/data/models/currency_model.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import 'features/currency_calculator/presentation/screens/main_screen.dart';
@@ -15,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Currency Converter',
       theme: ThemeData(
         // This is the theme of your application.
         //
