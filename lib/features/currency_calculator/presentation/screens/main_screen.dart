@@ -8,6 +8,10 @@ import '../widgets/currency_drop_down_widget.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/test_text_field.dart';
 
+enum GraphDays { thirty, ninety }
+
+GraphDays selected = GraphDays.thirty;
+
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -33,7 +37,6 @@ class _MainScreenState extends State<MainScreen> {
     CurrencyModel(name: 'MXN', image: 'assets/images/mexico.png'),
   ];
 
-
   String _selectedFirstCurrency = 'EUR';
   String _selectedSecondCurrency = 'PLN';
 
@@ -46,11 +49,8 @@ class _MainScreenState extends State<MainScreen> {
 
     print('current $rate');
 
-
-    secondFieldController.text = (int.parse(firstFieldController.text) *
-        rate!)
-        .toString();
-
+    secondFieldController.text =
+        (int.parse(firstFieldController.text) * rate!).toString();
   }
 
   @override
@@ -103,43 +103,49 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 13.0),
-              child: Text(
-                'Currency\nCalculator',
-                style: TextStyle(
-                    color: Color(0xff2479DF),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 35),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 28.0, vertical: 13.0),
+              child: RichText(
+                text: const TextSpan(
+                    text: 'Currency\nCalculator',
+                    style: TextStyle(
+                        color: Color(0xff2479DF),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 35),
+                    children: [
+                      TextSpan(
+                          text: '.',
+                          style: TextStyle(
+                              color: Color(0xff00D998), fontSize: 35.0))
+                    ]),
               ),
             ),
             TestTextField(
               suffixText: _selectedFirstCurrency,
               controller: firstFieldController,
             ),
-            Consumer(
-              builder: (context, watch, child) {
-                final converterState = watch(converterNotifierProvider);
-                if (converterState is ConverterLoading) {
-                  return TestTextField(
-                    suffixText: _selectedSecondCurrency,
-                    controller: secondFieldController,
-                  );
-                } else if (converterState is ConverterLoaded) {
-                 rate = converterState.rate;
-                  return TestTextField(
-                    suffixText: _selectedSecondCurrency,
-                    controller: secondFieldController,
-                  );
-                } else if (converterState is ConverterError) {
-                  return Text(converterState.message.toString());
-                }
+            Consumer(builder: (context, watch, child) {
+              final converterState = watch(converterNotifierProvider);
+              if (converterState is ConverterLoading) {
                 return TestTextField(
                   suffixText: _selectedSecondCurrency,
                   controller: secondFieldController,
                 );
+              } else if (converterState is ConverterLoaded) {
+                rate = converterState.rate;
+                return TestTextField(
+                  suffixText: _selectedSecondCurrency,
+                  controller: secondFieldController,
+                );
+              } else if (converterState is ConverterError) {
+                return Text(converterState.message.toString());
               }
-            ),
+              return TestTextField(
+                suffixText: _selectedSecondCurrency,
+                controller: secondFieldController,
+              );
+            }),
             const SizedBox(
               height: 20,
             ),
@@ -220,38 +226,39 @@ class _MainScreenState extends State<MainScreen> {
               child: Column(
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        children: const [
-                          Text(
-                            'Past 30 days',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          CircleAvatar(
-                            radius: 2,
-                            backgroundColor: Color(0xff00D899),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: const [
-                          Text(
-                            'Past 90 days',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          CircleAvatar(
-                            radius: 2,
-                            backgroundColor: Color(0xff00D899),
-                          )
-                        ],
-                      ),
+                      selected == GraphDays.thirty
+                          ? InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selected = GraphDays.thirty;
+                                });
+                              },
+                              child: const GraphTextDays('Past 30 days'))
+                          : InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selected = GraphDays.thirty;
+                                });
+                              },
+                              child: const BlurryGraphText('Past 30 days')),
+                      selected == GraphDays.ninety
+                          ? InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selected = GraphDays.ninety;
+                                });
+                              },
+                              child: const GraphTextDays('Past 90 days'))
+                          : InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selected = GraphDays.ninety;
+                                });
+                              },
+                              child: const BlurryGraphText('Past 90 days')),
                     ],
                   ),
                   const SizedBox(
@@ -263,9 +270,7 @@ class _MainScreenState extends State<MainScreen> {
                       width: double.infinity,
                       child: LineChart(
                         LineChartData(
-                          lineTouchData: LineTouchData(
-
-                              ),
+                          lineTouchData: LineTouchData(),
                           gridData: FlGridData(
                             show: false,
                             drawVerticalLine: false,
@@ -309,7 +314,6 @@ class _MainScreenState extends State<MainScreen> {
                               ),
                               getTitles: (value) {
                                 switch (value.toInt()) {
-
                                 }
                                 return '';
                               },
@@ -393,38 +397,77 @@ class _MainScreenState extends State<MainScreen> {
 
   Expanded customDropDownWidget(bool first) {
     return Expanded(
-                  child: Container(
-                    height: 50,
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 7.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xffF2F2F2), width: 2),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<dynamic>(
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: Color(0xff8C8C8C),
-                        ),
-                          value: first ? _selectedFirstCurrency : _selectedSecondCurrency,
-                          items: currencyList.map((CurrencyModel currency) {
-                            return DropdownMenuItem(
-                                value: currency.name,
-                                child: Opacity(
-                                  opacity: 1,
-                                  child: CustomTextWidget(
-                                    currency: currency.name,
-                                    image: currency.image,
-                                  ),
-                                ));
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              first ? _selectedFirstCurrency = newValue : _selectedSecondCurrency = newValue;
-                            });
-                          }),
-                    ),
-                  ),
-                );
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 7.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xffF2F2F2), width: 2),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<dynamic>(
+              icon: const Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: Color(0xff8C8C8C),
+              ),
+              value: first ? _selectedFirstCurrency : _selectedSecondCurrency,
+              items: currencyList.map((CurrencyModel currency) {
+                return DropdownMenuItem(
+                    value: currency.name,
+                    child: Opacity(
+                      opacity: 1,
+                      child: CustomTextWidget(
+                        currency: currency.name,
+                        image: currency.image,
+                      ),
+                    ));
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() {
+                  first
+                      ? _selectedFirstCurrency = newValue
+                      : _selectedSecondCurrency = newValue;
+                });
+              }),
+        ),
+      ),
+    );
+  }
+}
+
+class BlurryGraphText extends StatelessWidget {
+  final String text;
+  const BlurryGraphText(this.text, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(color: Color(0xff3D8EED)),
+    );
+  }
+}
+
+class GraphTextDays extends StatelessWidget {
+  final String days;
+  const GraphTextDays(this.days, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          days,
+          style: const TextStyle(color: Colors.white),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        const CircleAvatar(
+          radius: 2,
+          backgroundColor: Color(0xff00D899),
+        )
+      ],
+    );
   }
 }
