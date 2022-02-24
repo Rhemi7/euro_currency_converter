@@ -38,7 +38,7 @@ void main() {
         timestamp: 1645629062,
         base: "EUR",
         date: DateTime.parse("2022-02-23"),
-        rates: const {"PLN": 4.564393});
+        rates: const {"PLN": 4.564393},);
 
     test(
       'should check if the device is online',
