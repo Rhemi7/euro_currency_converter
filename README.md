@@ -25,19 +25,19 @@ To install this app
 git clone https://github.com/Rhemi7/euro_currency_converter.git
 ```
 
-And then install the required dependencies
+And then in terminal install the required dependencies
 
 ```
 flutter pub get
 ```
-Run the app
+Run the app in the project's root folder of the terminal
 
 ```
 flutter run --no-sound-null-safety
 ```
 
 ## Running the tests
-To run test cases
+Open a test file and run test cases in terminal
 
 ```
 flutter test --no-sound-null-safety
