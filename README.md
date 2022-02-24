@@ -65,7 +65,7 @@ Folder Structure
 ## APK
 For the APK of the project:
 
-- [Click here](https://drive.google.com/file/d/1ohNRMilB5bwrLaBXRdsIPbpMg3WvzX7X/view?usp=sharing)
+- [Click here](https://drive.google.com/file/d/1R1_FU4FgJyHx1NjE9P72eKiYbIlGE22H/view?usp=sharing)
 
 For the APK folder of the project:
 
