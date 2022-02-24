@@ -1,3 +1,4 @@
+import 'package:currency_calculator/features/currency_calculator/presentation/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import '../../../../core/error/failure.dart';
 import '../models/converter_response.dart';
@@ -17,7 +18,7 @@ class ConverterRemoteDataSourceImpl implements ConverterRemoteDataSource {
   @override
   Future<ConverterResponse> getCurrencyRate(String currency) async {
     final response = await client.get(
-      Uri.parse('http://data.fixer.io/api/latest?access_key=b641a6e48ddbb9bff685fe3b058136be&symbols=$currency&format=1'),
+      Uri.parse('http://data.fixer.io/api/latest?access_key=$kAPIkey&symbols=$currency&format=1'),
     );
 
     if (response.statusCode == 200) {

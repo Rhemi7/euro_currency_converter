@@ -18,6 +18,6 @@ class ConverterLoaded extends ConverterState {
 }
 
 class ConverterError extends ConverterState {
-  String? message;
-  ConverterError({this.message});
+  String message;
+  ConverterError({required this.message});
 }

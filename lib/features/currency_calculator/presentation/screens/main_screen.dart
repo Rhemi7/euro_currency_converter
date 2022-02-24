@@ -45,25 +45,28 @@ class _MainScreenState extends State<MainScreen> {
   double? rate = 0;
 
   calculateConvertedValue() {
-    context
-        .read(converterNotifierProvider.notifier)
-        .getRate(_selectedSecondCurrency);
+    setState(() {
 
-    secondFieldController.text =
-        (int.parse(firstFieldController.text) * rate!).toString();
+      firstFieldController.text.isEmpty ? secondFieldController.text = '0' :
+      secondFieldController.text =
+          (int.parse(firstFieldController.text) * rate!).toString();
+    });
+
   }
 
   @override
   void initState() {
     firstFieldController.addListener(calculateConvertedValue);
-    secondFieldController.addListener(calculateConvertedValue);
+    context
+        .read(converterNotifierProvider.notifier)
+        .getRate(_selectedSecondCurrency);
     super.initState();
   }
 
   @override
   void dispose() {
     firstFieldController.removeListener(calculateConvertedValue);
-    secondFieldController.removeListener(calculateConvertedValue);
+    firstFieldController.dispose();
     super.dispose();
   }
 
@@ -127,7 +130,7 @@ class _MainScreenState extends State<MainScreen> {
                   );
                 } else if (converterState is ConverterError) {
                   return TestTextField(
-                    suffixText: "Error",
+                    suffixText: converterState.message,
                     controller: secondFieldController,
                   );
                 }
@@ -159,9 +162,9 @@ class _MainScreenState extends State<MainScreen> {
                 child: PrimaryButton(
                   text: 'Convert',
                   onPressed: () {
-                    context
-                        .read(converterNotifierProvider.notifier)
-                        .getRate("USD");
+                    // context
+                    //     .read(converterNotifierProvider.notifier)
+                    //     .getRate("USD");
                   },
                 ),
               ),
@@ -291,6 +294,10 @@ class _MainScreenState extends State<MainScreen> {
                   first
                       ? _selectedFirstCurrency = newValue
                       : _selectedSecondCurrency = newValue;
+
+                  context
+                      .read(converterNotifierProvider.notifier)
+                      .getRate(_selectedSecondCurrency);
                 });
               }),
         ),

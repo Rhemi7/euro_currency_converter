@@ -2,6 +2,7 @@
 import 'package:currency_calculator/core/error/failure.dart';
 import 'package:currency_calculator/features/currency_calculator/data/datasources/currency_converter_remote_data_source.dart';
 import 'package:currency_calculator/features/currency_calculator/data/models/converter_response.dart';
+import 'package:currency_calculator/features/currency_calculator/presentation/utils/constants.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
@@ -13,7 +14,7 @@ class MockClient extends Mock implements http.Client {}
 void main() {
   late MockClient client;
   late ConverterRemoteDataSourceImpl dataSource;
-  var url = Uri.parse('http://data.fixer.io/api/latest?access_key=b641a6e48ddbb9bff685fe3b058136be&symbols=USD&format=1');
+  var url = Uri.parse('http://data.fixer.io/api/latest?access_key=$kAPIkey&symbols=USD&format=1');
   setUp(() {
     client = MockClient();
     dataSource = ConverterRemoteDataSourceImpl(client: client);

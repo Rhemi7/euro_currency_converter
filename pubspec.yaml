@@ -49,7 +49,7 @@ dev_dependencies:
   equatable: ^2.0.2
 #  Mockito used for testing
   mockito: ^5.0.9
-#  darts is used for error handling
+#  Dartz is used for functional programming
   dartz: ^0.10.0
 #  Data connection checker is used to check data connection on device
   data_connection_checker: ^0.3.4
