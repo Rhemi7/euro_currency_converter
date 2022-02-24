@@ -18,13 +18,13 @@ Future<void> setUpLocator() async {
   //Riverpod State notifiers
   sl.registerLazySingleton(() => ConverterNotifier(sl()));
 
-  //Drinks Repository
+  //Currency Converter Repository
   sl.registerLazySingleton<CurrencyConverterRepository>(() => CurrencyConverterRepositoryImpl(
     networkInfo: sl(),
     remoteDataSource: sl(),
   ));
 
-  //Drinks Data sources
+  //Currency Data sources
   sl.registerLazySingleton<ConverterRemoteDataSource>(
           () => ConverterRemoteDataSourceImpl(client: sl()));
 
